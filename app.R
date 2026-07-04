@@ -172,7 +172,7 @@ server_network_render <- function(eds) {
   nodes$shadow <- TRUE
   
   # map types to colors
-  palette_fixed <- c(activation = "#b31b1c", inhibition = "#e31a1c", unknown = "#6a6a6a")
+  palette_fixed <- c(activation = "#e31a1c", inhibition = "#b31b1c", unknown = "#6a6a6a")
   types <- unique(na.omit(eds$interaction_type))
   if (length(types) == 0) types <- "unknown"
   type_colors <- palette_fixed[names(palette_fixed) %in% types]
