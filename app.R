@@ -172,7 +172,7 @@ server_network_render <- function(eds) {
   nodes$shadow <- TRUE
   
   # map types to colors
-  palette_fixed <- c(activation = "#e31a1c", inhibition = "#b31b1c", unknown = "#6a6a6a")
+  palette_fixed <- c(activation = "#e31a1c", inhibition = "#1f78b4", unknown = "#6a6a6a")
   types <- unique(na.omit(eds$interaction_type))
   if (length(types) == 0) types <- "unknown"
   type_colors <- palette_fixed[names(palette_fixed) %in% types]
@@ -252,7 +252,15 @@ server <- function(input, output, session) {
   }, ignoreNULL = FALSE)
   
   output$interactions <- renderTable({
-    head(build_edges(), 200)
+    df_out <- head(build_edges(), 200)
+    # keep only columns used by the network/table view
+    desired_cols <- c("source_genesymbol", "target_genesymbol", "interaction_type", "interaction_strength")
+    available_cols <- intersect(desired_cols, colnames(df_out))
+    if (length(available_cols) == 0) {
+      df_out
+    } else {
+      df_out[, available_cols, drop = FALSE]
+    }
   })
   
   output$info <- renderText({
